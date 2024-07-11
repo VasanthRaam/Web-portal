@@ -100,6 +100,9 @@
             font-size: 18px;
             margin-bottom: 20px;
           }
+          #hidden{
+            display:none;
+          }
           
         @media (max-width: 768px) {
             form {
@@ -123,23 +126,11 @@
                 values.push(checkbox.value);
             });
             var course = values.join(', ');
-
+            document.getElementById("summa").innerHTML = course;
+            var x = document.getElementById("summa");
+            console.log(x);
             alert("Thanks for filling the form " + name);
 
-            let message = `New Admission:\n
-            Name: ${name}\n
-            Date of Birth: ${dob}\n
-            Mother's Name: ${mother}\n
-            Father's Name: ${father}\n
-            Age: ${age}\n
-            Address: ${address}\n
-            Contact no 1: ${contact1}\n
-            Contact no 2: ${contact2}\n
-            Course: ${course}\n`;
-
-            let encodedMessage = encodeURIComponent(message);
-            let whatsappLink = `https://wa.me/+919443333733/?text=${encodedMessage}`;
-            window.open(whatsappLink, '_blank');
         }
         
         $(document).ready(function() {
@@ -236,39 +227,42 @@
     </div>
     <div id="container2">
         <h1>Admission Portal</h1>
-        <form role="form" onsubmit="event.preventDefault(); store();">
+        <form role="form" name="submit-to-google-sheet" onsubmit="event.preventDefault(); store();">
             <div class="form-group">
                 <label for="name">Student's Name:</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter Your Name" required>
+                <input type="text" class="form-control" id="name" placeholder="Enter Your Name" required name="Name">
             </div>
             <div class="form-group">
                 <label for="dob">Date of Birth:</label>
-                <input type="date" class="form-control" id="dob" placeholder="DD/MM/YYYY" required>
+                <input type="date" class="form-control" id="dob" placeholder="DD/MM/YYYY" required name="DOB">
             </div>
             <div class="form-group">
                 <label for="mother">Mother's Name:</label>
-                <input type="text" class="form-control" id="mother" placeholder="Enter Mother's Name" required>
+                <input type="text" class="form-control" id="mother" placeholder="Enter Mother's Name" required name="Mother's Name">
             </div>
             <div class="form-group">
                 <label for="father">Father's Name:</label>
-                <input type="text" class="form-control" id="father" placeholder="Enter Father's Name" required>
+                <input type="text" class="form-control" id="father" placeholder="Enter Father's Name" required name="Father's Name">
             </div>
             <div class="form-group">
                 <label for="age">Age:</label>
-                <input type="number" class="form-control" id="age" placeholder="Enter the Age" required>
+                <input type="number" class="form-control" id="age" placeholder="Enter the Age" required name="Age">
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
-                <textarea id="address" class="form-control" placeholder="Enter the Address" rows="4" required></textarea>
+                <textarea id="address" class="form-control" placeholder="Enter the Address" rows="4" required name="Address"></textarea>
             </div>
             <div class="form-group">
                 <label for="contact1">Contact Number 1:</label>
-                <input type="number" class="form-control" id="contact1" placeholder="Primary Number" required>
+                <input type="number" class="form-control" id="contact1" placeholder="Primary Number" required name="Contact">
             </div>
             <div class="form-group">
                 <label for="contact2">Contact Number 2:</label>
-                <input type="number" class="form-control" id="contact2" placeholder="Secondary Number" required>
+                <input type="number" class="form-control" id="contact2" placeholder="Secondary Number" required name="Contact2">
                 <small>*If not, type None</small>
+            </div>
+            <div id="hidden">
+                <textarea class="form-control" id="summa" name="Course"></textarea>
             </div>
             <div class="form-group">
                 <label for="course">Select the Course:</label>
@@ -327,6 +321,17 @@
             </div>
           </footer>
     </div>
-    
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyBnmhFMMW4yp37tGlMN4LPQr8sGIeMkV4wTPtGb27MBE1qnqg8MFeMspISzKwyjiZ-/exec'
+        const form = document.forms['submit-to-google-sheet']
+      
+        form.addEventListener('submit', e => {
+          e.preventDefault()
+          fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => console.log('Success!', response))
+            .catch(error => console.error('Error!', error.message))
+        })
+        
+      </script>
 </body>
 </html>
